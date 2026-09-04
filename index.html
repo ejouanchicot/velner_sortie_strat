@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schah &mdash; qui fait quoi</title>
+<meta name="description" content="Strategic guide - Schah, Geas Fete, Reisenjima.">
+<meta name="theme-color" content="#d8b26a">
+<!-- Open Graph : miniature Discord / Twitter / Slack -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Strat Schah">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:url" content="https://ejouanchicot.github.io/Schah/">
+<meta property="og:title" content="Schah &mdash; qui fait quoi">
+<meta property="og:description" content="Strategic guide - Schah, Geas Fete, Reisenjima.">
+<meta property="og:image" content="https://ejouanchicot.github.io/Schah/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Schah - fiche de strat">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Schah &mdash; qui fait quoi">
+<meta name="twitter:description" content="Strategic guide - Schah, Geas Fete, Reisenjima.">
+<meta name="twitter:image" content="https://ejouanchicot.github.io/Schah/og.jpg">
+<style>
+  :root{
+    --bg:#100e17;--panel:#181523;--panel2:#1f1b2c;--line:#332d45;
+    --txt:#e9e5dd;--dim:#a49bb5;--gold:#d8b26a;--red:#ff6b6b;--blue:#6fb2e0;
+  }
+  *{box-sizing:border-box}
+  html{font-size:15px}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:1rem;line-height:1.4}
+
+  .page{padding:1.1rem 1.2rem 1.4rem;max-width:1900px;margin:0 auto}
+
+  /* ---------- bandeau ---------- */
+  .top{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;
+    gap:.3rem 1.4rem;padding-bottom:.55rem;margin-bottom:.75rem;
+    border-bottom:1px solid var(--line)}
+  .top h1{margin:0;font-size:2.05rem;font-weight:800;letter-spacing:-.02em;line-height:1}
+  .eyebrow{color:var(--gold);font-size:.66rem;font-weight:800;letter-spacing:.17em;
+    text-transform:uppercase}
+  .top .note{color:var(--dim);font-size:.85rem;flex:1 1 15rem;min-width:0}
+
+  /* ---------- ordre de kill : bandeau central ---------- */
+  .killbar{border:1px solid rgba(216,178,106,.45);border-radius:.6rem;
+    background:linear-gradient(180deg,rgba(216,178,106,.10),rgba(216,178,106,.03));
+    padding:.6rem .9rem;margin-bottom:.85rem;text-align:center}
+  .killbar .kl{display:block;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--gold);font-weight:800;margin-bottom:.45rem}
+  .kill{display:flex;align-items:stretch;justify-content:center;gap:.4rem;flex-wrap:wrap}
+  .kill b{background:var(--panel2);border:1px solid var(--gold);color:var(--gold);
+    border-radius:.4rem;padding:.3rem .85rem;font-size:1.02rem;font-weight:800;
+    line-height:1.1;white-space:nowrap;display:flex;flex-direction:column;gap:.1rem}
+  .kill b em{font-style:normal;font-size:.6rem;font-weight:600;color:var(--dim);
+    letter-spacing:.08em}
+  .kill b.last{border-color:var(--line);color:var(--dim)}
+  .kill i{color:var(--gold);font-style:normal;font-size:1rem;align-self:center;opacity:.55}
+  .kh{display:block;margin:.5rem 0 0;font-size:.78rem;color:var(--dim);line-height:1.35}
+  .kh b{color:var(--txt)}
+
+  /* ---------- grille ---------- */
+  .grid{display:grid;gap:.8rem;grid-template-columns:1fr}
+  .stack{display:flex;flex-direction:column;gap:.8rem;min-width:0}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:.6rem;
+    padding:.7rem .85rem;min-width:0}
+  .card > h2{margin:0 0 .5rem;font-size:.66rem;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--gold);font-weight:800;display:flex;align-items:center;gap:.5rem}
+  .card > h2::after{content:"";flex:1;height:1px;background:var(--line)}
+  .card.alert{border-color:rgba(255,107,107,.4);background:rgba(255,107,107,.06)}
+  .card.alert > h2{color:var(--red)}
+
+  /* ---------- carte ---------- */
+  .mapwrap{display:flex;flex-direction:column;gap:.55rem;min-height:0;flex:1}
+  .mapwrap figure{margin:0;background:#000;border:1px solid var(--line);border-radius:.45rem;
+    overflow:hidden;display:flex;min-height:0;flex:1}
+  .mapwrap img{display:block;width:100%;height:100%;object-fit:contain}
+  .notes{display:flex;flex-direction:column;gap:.35rem}
+  .nt{border-left:2px solid var(--c,var(--gold));padding-left:.55rem;font-size:.79rem;
+    color:var(--dim);line-height:1.35}
+  .nt b{color:var(--txt);display:block;font-size:.73rem;letter-spacing:.04em}
+
+  /* ---------- qui fait quoi ---------- */
+  .jobs{display:flex;flex-direction:column;gap:.28rem}
+  .jb{display:grid;grid-template-columns:4.5rem 1fr;gap:.6rem;align-items:start;
+    padding:.34rem .45rem;border-radius:.35rem;font-size:.82rem;line-height:1.33}
+  .jb:nth-child(odd){background:var(--panel2)}
+  .jb .j{font-weight:800;color:var(--gold);font-size:.9rem;line-height:1.15}
+  .jb .j em{display:block;font-style:normal;color:var(--dim);font-weight:600;
+    font-size:.59rem;letter-spacing:.08em;text-transform:uppercase;margin-top:.1rem}
+
+  /* ---------- listes ---------- */
+  .list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.4rem}
+  .list li{font-size:.82rem;line-height:1.36;padding-left:.8rem;position:relative;color:var(--dim)}
+  .list li::before{content:"";position:absolute;left:0;top:.5em;width:.28rem;height:.28rem;
+    border-radius:50%;background:var(--gold)}
+  .list li b{color:var(--txt)}
+  .list li u{text-decoration:none;color:var(--red);font-weight:700}
+  .list li i{font-style:italic}
+  .alert .list li{color:var(--txt)}
+  .alert .list li::before{background:var(--red)}
+  .alert .list li b{color:var(--red)}
+  .add-n{color:var(--gold);font-weight:800}
+
+  /* ---------- mobile : compacter + ordre de lecture ---------- */
+  @media(max-width:899px){
+    .page{padding:.8rem .8rem 1.2rem}
+    .top{gap:.45rem .9rem;padding-bottom:.55rem;margin-bottom:.7rem}
+    .top h1{font-size:1.7rem}
+    .killbar{padding:.5rem .6rem;margin-bottom:.65rem}
+    .kill b{font-size:.92rem;padding:.26rem .6rem}
+    .kh{font-size:.75rem}
+    .grid{gap:.6rem}
+    .stack{display:contents}
+    .a-map{order:1}.a-jobs{order:2}.a-wipe{order:3}.a-adds{order:4}.a-prep{order:5}
+    .card{padding:.6rem .7rem}
+    .mapwrap{gap:.5rem}
+    .mapwrap figure,.mapwrap img{max-height:42vh}
+    .jb{grid-template-columns:3.8rem 1fr;gap:.5rem;padding:.3rem .35rem}
+    .notes{gap:.3rem}
+  }
+
+  /* ---------- tablette : 2 colonnes ---------- */
+  @media(min-width:620px) and (max-width:899px){
+    .grid{grid-template-columns:1fr 1fr;align-items:start}
+    .a-map{grid-column:1;grid-row:1 / span 3}
+    .a-jobs{grid-column:2}.a-wipe{grid-column:2}.a-adds{grid-column:2}
+    .a-prep{grid-column:1}
+    .mapwrap figure,.mapwrap img{max-height:none}
+  }
+
+  /* ---------- desktop : tout sur un ecran ---------- */
+  @media(min-width:900px){
+    html{font-size:clamp(11px, min(1.72vh, 1.02vw), 22px)}
+    body{height:100vh;overflow:hidden;display:flex;flex-direction:column}
+    .page{flex:1;min-height:0;display:flex;flex-direction:column;
+      padding:1.2rem 1.4rem 1.3rem;width:100%;}
+    .grid{flex:1;min-height:0;align-items:stretch;
+      grid-template-columns:minmax(13rem,1fr) 1.24fr 1.34fr}
+    .a-map{display:flex;flex-direction:column;min-height:0}
+    .stack{min-height:0}
+    .stack .card{display:flex;flex-direction:column}
+    .a-adds{flex:1}
+  }
+
+  /* ---------- telephone en paysage ---------- */
+  @media(max-height:520px) and (min-width:700px){
+    .grid{grid-template-columns:1fr 1fr 1fr;align-items:start}
+    .stack{display:flex}
+    .mapwrap figure,.mapwrap img{max-height:60vh}
+    .top h1{font-size:1.5rem}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="top">
+    <div>
+      <div class="eyebrow">Geas Fete &middot; Reisenjima</div>
+      <h1>Schah</h1>
+    </div>
+  </div>
+
+  <div class="killbar">
+    <span class="kl">Ordre de kill</span>
+    <div class="kill">
+      <b>Bhata<em>0:30</em></b><i>&rsaquo;</i><b>Ashva<em>1:00</em></b><i>&rsaquo;</i><b>Gaja<em>1:30</em></b><i>&rsaquo;</i><b>Ratha<em>2:00</em></b><i>&rsaquo;</i><b class="last">Mantri<em>3:00</em></b>
+    </div>
+    <p class="kh">C'est l'ordre de pop. <b>Le Bhata coupe la file d&egrave;s qu'il sort</b> &mdash; au-del&agrave; de 2 min il devient un 2<sup>e</sup> Mantri.</p>
+  </div>
+
+  <div class="grid">
+
+    <div class="card a-map">
+      <h2>Placement</h2>
+      <div class="mapwrap">
+        <figure><img src="map.jpg" alt="Carte de placement pour Schah"></figure>
+        <div class="notes">
+          <div class="nt" style="--c:var(--blue)"><b>Droite, au ???</b>Le RUN tient Schah sur place. Il ne bouge plus.</div>
+          <div class="nt" style="--c:var(--gold)"><b>Gauche, 20 yalms</b>Le WAR ram&egrave;ne les adds. C'est l&agrave; qu'on tape.</div>
+          <div class="nt" style="--c:var(--red)"><b>&Ccedil;a coupe dans les 2 sens</b>Le groupe hors des AoE de Schah, le RUN hors des -ga des adds.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="card a-jobs">
+        <h2>Qui fait quoi</h2>
+        <div class="jobs">
+          <div class="jb"><span class="j">WAR<em>/DRG &middot; leader</em></span>
+            <span>Porte le trinket et <b>pop</b>. Provoke chaque add et les ram&egrave;ne &agrave; gauche. Ne touche jamais Schah.</span></div>
+          <div class="jb"><span class="j">RUN<em>tank Schah</em></span>
+            <span>Provoke Schah juste apr&egrave;s le pop, le tient &agrave; droite. <b>Odyllic &agrave; 55&nbsp;%.</b></span></div>
+          <div class="jb"><span class="j">SCH<em>anti-shield</em></span>
+            <span><b>Casse le shield du Gaja</b> &agrave; la magie : sorts rapides et pas chers, c'est le nombre de casts qui compte. Accession Erase sur les debuffs.</span></div>
+          <div class="jb"><span class="j">RDM<em>heal</em></span>
+            <span>Heal principal. Haste II, Phalanx II sur les tanks, Dia III.</span></div>
+          <div class="jb"><span class="j">BRD<em>songs</em></span>
+            <span>Songs + Savage Blade. <b>Rechante apr&egrave;s chaque Dark Arrivisme.</b></span></div>
+          <div class="jb"><span class="j">COR<em>rolls</em></span>
+            <span>Chaos + Sam rolls, Savage Blade. <b>Quick Draw</b> passe &agrave; travers le shield du Gaja.</span></div>
+          <div class="jb"><span class="j">GEO<em>bubbles</em></span>
+            <span>Fury / Frailty, bubbles <b>c&ocirc;t&eacute; adds</b> &mdash; pas c&ocirc;t&eacute; RUN.</span></div>
+        </div>
+      </div>
+
+      <div class="card a-prep">
+        <h2>Avant de pop</h2>
+        <ul class="list">
+          <li>Le <b>WAR est party leader</b> et porte Schah's gambit.</li>
+          <li>Les 7 ont leur <b>tribulens</b>.</li>
+          <li><b>Echo Drops</b> sur le RDM et le SCH.</li>
+          <li><b>Throwing Tomahawks</b> dans le sac du WAR.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="card alert a-wipe">
+        <h2>&Ccedil;a fait wipe</h2>
+        <ul class="list">
+          <li><b>Personne ne touche Schah</b> &agrave; part le RUN. Pas de Provoke, pas de WS, rien.</li>
+          <li><b>WAR : jamais Super Jump ni High Jump</b> &mdash; &ccedil;a efface sa haine, les adds partent sur les mages.</li>
+          <li><b>Le seuil des 50&nbsp;% vaut pour Schah ET pour Mantri</b> &rarr; Enthrall, charm AoE. On ne le franchit que pr&ecirc;t &agrave; burst.</li>
+          <li><b>Garder les 2 packs s&eacute;par&eacute;s.</b> Personne ne fait la navette.</li>
+        </ul>
+      </div>
+
+      <div class="card a-adds">
+        <h2>Ce que chaque add vous fait</h2>
+        <ul class="list">
+          <li><span class="add-n">Bhata</span> &mdash; Dark Arrivisme : knockback AoE et <u>dispel 3 buffs</u>. Le plus faible, mais il passe 7 fois : le BRD et le COR rebuffent en continu.</li>
+          <li><span class="add-n">Ashva</span> &mdash; Silencega AoE (RDM <i>et</i> SCH coup&eacute;s d'un coup). Banneret Charge : 20', HP &agrave; 1 <u>et reset de haine</u> &mdash; le WAR reprend tous les adds derri&egrave;re.</li>
+          <li><span class="add-n">Gaja</span> &mdash; Slowga. Besieger's Bane : Bio + <u>Zombie</u> (plus aucun heal re&ccedil;u) + Terror. Shield : la magie fait 0 d&eacute;g&acirc;t mais l'&eacute;rode, le physique non.</li>
+          <li><span class="add-n">Ratha</span> &mdash; Bindga + Paralyga. Shadow Wreck : d&eacute;g&acirc;ts AoE et <u>50&nbsp;% Defense Down</u>, et &ccedil;a peut lui donner un buff type Dread Spikes.</li>
+          <li><span class="add-n">Mantri</span> &mdash; <u>Enthrall &agrave; &le;&nbsp;50&nbsp;% : charm AoE.</u> Stun AoE + Sleepga. <b>R&eacute;siste &agrave; la magie</b> (moiti&eacute; des d&eacute;g&acirc;ts d'un Bhata) : &agrave; tuer au physique. Ne respawn jamais &mdash; on peut la laisser en vie, 1 seul add ne donne pas de DT.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

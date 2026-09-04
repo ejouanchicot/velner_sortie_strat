@@ -3,246 +3,805 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Schah &mdash; qui fait quoi</title>
-<meta name="description" content="Strategic guide - Schah, Geas Fete, Reisenjima.">
-<meta name="theme-color" content="#d8b26a">
-<!-- Open Graph : miniature Discord / Twitter / Slack -->
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Strat Schah">
-<meta property="og:locale" content="fr_FR">
-<meta property="og:url" content="https://ejouanchicot.github.io/Schah/">
-<meta property="og:title" content="Schah &mdash; qui fait quoi">
-<meta property="og:description" content="Strategic guide - Schah, Geas Fete, Reisenjima.">
-<meta property="og:image" content="https://ejouanchicot.github.io/Schah/og.jpg">
-<meta property="og:image:type" content="image/jpeg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Schah - fiche de strat">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Schah &mdash; qui fait quoi">
-<meta name="twitter:description" content="Strategic guide - Schah, Geas Fete, Reisenjima.">
-<meta name="twitter:image" content="https://ejouanchicot.github.io/Schah/og.jpg">
+<title>Sortie 9 boss — méthode Velner (VF)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#100e17;--panel:#181523;--panel2:#1f1b2c;--line:#332d45;
-    --txt:#e9e5dd;--dim:#a49bb5;--gold:#d8b26a;--red:#ff6b6b;--blue:#6fb2e0;
-  }
-  *{box-sizing:border-box}
-  html{font-size:15px}
-  body{margin:0;background:var(--bg);color:var(--txt);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    font-size:1rem;line-height:1.4}
+:root{
+  --bg:#0E1116;
+  --panel:#161B23;
+  --panel-2:#1D242E;
+  --line:#2A3340;
+  --ink:#DDE4EE;
+  --ink-dim:#95A2B3;
+  --kaznar:#5BC8C2;      /* glow machine Ra'Kaznar */
+  --gold:#E0A33C;        /* règles / 2H */
+  --alert:#D96A56;       /* danger */
+  --pld:#6FA8DC;
+  --rdm:#E5726F;
+  --brd:#BFA0E8;
+  --cor:#E0A33C;
+  --geo:#79CE8D;
+  --dnc:#EE8CB6;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:"Bricolage Grotesque","IBM Plex Sans",sans-serif;font-weight:800;line-height:1.05;margin:0}
+a{color:var(--kaznar)}
 
-  .page{padding:1.1rem 1.2rem 1.4rem;max-width:1900px;margin:0 auto}
+/* ---------- Layout ---------- */
+.shell{max-width:1180px;margin:0 auto;padding:0 20px}
+.grid{display:grid;grid-template-columns:210px minmax(0,1fr);gap:44px;align-items:start}
+@media (max-width:900px){.grid{grid-template-columns:1fr;gap:0}}
 
-  /* ---------- bandeau ---------- */
-  .top{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;
-    gap:.3rem 1.4rem;padding-bottom:.55rem;margin-bottom:.75rem;
-    border-bottom:1px solid var(--line)}
-  .top h1{margin:0;font-size:2.05rem;font-weight:800;letter-spacing:-.02em;line-height:1}
-  .eyebrow{color:var(--gold);font-size:.66rem;font-weight:800;letter-spacing:.17em;
-    text-transform:uppercase}
-  .top .note{color:var(--dim);font-size:.85rem;flex:1 1 15rem;min-width:0}
+/* ---------- Hero ---------- */
+header.hero{
+  border-bottom:1px solid var(--line);
+  background:
+    radial-gradient(120% 140% at 15% -20%, rgba(91,200,194,.16), transparent 60%),
+    linear-gradient(180deg,#10151C,#0E1116);
+  padding:56px 0 36px;
+}
+.kicker{color:var(--kaznar);font-size:.9rem;letter-spacing:.02em;margin:0 0 10px}
+h1{font-size:clamp(2.4rem,6vw,4.2rem);letter-spacing:-.03em}
+.lede{color:var(--ink-dim);max-width:62ch;margin:16px 0 0}
+.setup{margin-top:26px;display:flex;flex-wrap:wrap;gap:8px}
+.setup span{
+  border:1px solid var(--line);border-radius:2px;background:var(--panel);
+  padding:5px 10px;font-size:.85rem;color:var(--ink-dim)
+}
+.setup b{color:var(--ink);font-weight:600}
 
-  /* ---------- ordre de kill : bandeau central ---------- */
-  .killbar{border:1px solid rgba(216,178,106,.45);border-radius:.6rem;
-    background:linear-gradient(180deg,rgba(216,178,106,.10),rgba(216,178,106,.03));
-    padding:.6rem .9rem;margin-bottom:.85rem;text-align:center}
-  .killbar .kl{display:block;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
-    color:var(--gold);font-weight:800;margin-bottom:.45rem}
-  .kill{display:flex;align-items:stretch;justify-content:center;gap:.4rem;flex-wrap:wrap}
-  .kill b{background:var(--panel2);border:1px solid var(--gold);color:var(--gold);
-    border-radius:.4rem;padding:.3rem .85rem;font-size:1.02rem;font-weight:800;
-    line-height:1.1;white-space:nowrap;display:flex;flex-direction:column;gap:.1rem}
-  .kill b em{font-style:normal;font-size:.6rem;font-weight:600;color:var(--dim);
-    letter-spacing:.08em}
-  .kill b.last{border-color:var(--line);color:var(--dim)}
-  .kill i{color:var(--gold);font-style:normal;font-size:1rem;align-self:center;opacity:.55}
-  .kh{display:block;margin:.5rem 0 0;font-size:.78rem;color:var(--dim);line-height:1.35}
-  .kh b{color:var(--txt)}
+/* route */
+.route{margin-top:34px;display:flex;flex-wrap:wrap;align-items:stretch;gap:6px}
+.route a{
+  display:flex;flex-direction:column;gap:2px;min-width:82px;
+  text-decoration:none;color:var(--ink);
+  border:1px solid var(--line);border-top:2px solid var(--kaznar);
+  background:var(--panel);padding:9px 11px;
+}
+.route a:hover,.route a:focus-visible{background:var(--panel-2);border-top-color:var(--gold)}
+.route .sect{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.5rem;line-height:1}
+.route .who{font-size:.78rem;color:var(--ink-dim)}
+.route .sep{align-self:center;color:var(--line)}
+.route a.final{border-top-color:var(--alert)}
 
-  /* ---------- grille ---------- */
-  .grid{display:grid;gap:.8rem;grid-template-columns:1fr}
-  .stack{display:flex;flex-direction:column;gap:.8rem;min-width:0}
+/* ---------- Nav ---------- */
+nav.toc{position:sticky;top:24px;padding:36px 0}
+nav.toc ol{list-style:none;margin:0;padding:0}
+nav.toc li{margin:0 0 2px}
+nav.toc a{
+  display:block;text-decoration:none;color:var(--ink-dim);font-size:.88rem;
+  padding:4px 0 4px 12px;border-left:2px solid var(--line);
+}
+nav.toc a:hover{color:var(--ink)}
+nav.toc a.on{color:var(--ink);border-left-color:var(--kaznar)}
+@media (max-width:900px){nav.toc{display:none}}
 
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:.6rem;
-    padding:.7rem .85rem;min-width:0}
-  .card > h2{margin:0 0 .5rem;font-size:.66rem;letter-spacing:.15em;text-transform:uppercase;
-    color:var(--gold);font-weight:800;display:flex;align-items:center;gap:.5rem}
-  .card > h2::after{content:"";flex:1;height:1px;background:var(--line)}
-  .card.alert{border-color:rgba(255,107,107,.4);background:rgba(255,107,107,.06)}
-  .card.alert > h2{color:var(--red)}
+/* ---------- Sections ---------- */
+main{padding:36px 0 90px}
+section{padding:34px 0;border-top:1px solid var(--line)}
+section:first-child{border-top:0}
+.sect-head{display:flex;gap:16px;align-items:baseline;flex-wrap:wrap}
+.badge{
+  font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:2.6rem;line-height:.8;
+  color:var(--kaznar);
+}
+.badge.end{color:var(--alert)}
+h2{font-size:clamp(1.5rem,3.2vw,2.1rem);letter-spacing:-.02em}
+.tag{
+  font-size:.78rem;color:var(--ink-dim);border:1px solid var(--line);
+  padding:3px 8px;border-radius:2px;background:var(--panel)
+}
+section > p{max-width:70ch;color:var(--ink-dim)}
+section > p strong{color:var(--ink);font-weight:600}
 
-  /* ---------- carte ---------- */
-  .mapwrap{display:flex;flex-direction:column;gap:.55rem;min-height:0;flex:1}
-  .mapwrap figure{margin:0;background:#000;border:1px solid var(--line);border-radius:.45rem;
-    overflow:hidden;display:flex;min-height:0;flex:1}
-  .mapwrap img{display:block;width:100%;height:100%;object-fit:contain}
-  .notes{display:flex;flex-direction:column;gap:.35rem}
-  .nt{border-left:2px solid var(--c,var(--gold));padding-left:.55rem;font-size:.79rem;
-    color:var(--dim);line-height:1.35}
-  .nt b{color:var(--txt);display:block;font-size:.73rem;letter-spacing:.04em}
+/* job blocks */
+.jobs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:22px}
+.job{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--line);padding:14px 16px}
+.job h4{font-size:.95rem;letter-spacing:.01em;margin-bottom:8px}
+.job ul{margin:0;padding-left:18px}
+.job li{margin:0 0 5px;font-size:.93rem}
+.job li:last-child{margin-bottom:0}
+.job.pld{border-left-color:var(--pld)} .job.pld h4{color:var(--pld)}
+.job.rdm{border-left-color:var(--rdm)} .job.rdm h4{color:var(--rdm)}
+.job.brd{border-left-color:var(--brd)} .job.brd h4{color:var(--brd)}
+.job.cor{border-left-color:var(--cor)} .job.cor h4{color:var(--cor)}
+.job.geo{border-left-color:var(--geo)} .job.geo h4{color:var(--geo)}
+.job.dnc{border-left-color:var(--dnc)} .job.dnc h4{color:var(--dnc)}
+.job.all{border-left-color:var(--kaznar)} .job.all h4{color:var(--kaznar)}
 
-  /* ---------- qui fait quoi ---------- */
-  .jobs{display:flex;flex-direction:column;gap:.28rem}
-  .jb{display:grid;grid-template-columns:4.5rem 1fr;gap:.6rem;align-items:start;
-    padding:.34rem .45rem;border-radius:.35rem;font-size:.82rem;line-height:1.33}
-  .jb:nth-child(odd){background:var(--panel2)}
-  .jb .j{font-weight:800;color:var(--gold);font-size:.9rem;line-height:1.15}
-  .jb .j em{display:block;font-style:normal;color:var(--dim);font-weight:600;
-    font-size:.59rem;letter-spacing:.08em;text-transform:uppercase;margin-top:.1rem}
+/* callouts */
+.note,.danger{
+  margin:22px 0 0;padding:14px 18px;background:var(--panel);
+  border:1px solid var(--line);border-left:3px solid var(--gold);max-width:76ch
+}
+.danger{border-left-color:var(--alert)}
+.note h4,.danger h4{font-size:.95rem;margin-bottom:6px;color:var(--gold)}
+.danger h4{color:var(--alert)}
+.note p,.danger p{margin:0;font-size:.93rem}
+.note ul,.danger ul{margin:6px 0 0;padding-left:18px;font-size:.93rem}
 
-  /* ---------- listes ---------- */
-  .list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.4rem}
-  .list li{font-size:.82rem;line-height:1.36;padding-left:.8rem;position:relative;color:var(--dim)}
-  .list li::before{content:"";position:absolute;left:0;top:.5em;width:.28rem;height:.28rem;
-    border-radius:50%;background:var(--gold)}
-  .list li b{color:var(--txt)}
-  .list li u{text-decoration:none;color:var(--red);font-weight:700}
-  .list li i{font-style:italic}
-  .alert .list li{color:var(--txt)}
-  .alert .list li::before{background:var(--red)}
-  .alert .list li b{color:var(--red)}
-  .add-n{color:var(--gold);font-weight:800}
+/* tables */
+table{width:100%;border-collapse:collapse;margin-top:20px;font-size:.93rem}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{color:var(--ink-dim);font-weight:500;font-size:.85rem}
+tbody tr:hover{background:var(--panel)}
+td b{color:var(--kaznar);font-weight:600}
 
-  /* ---------- mobile : compacter + ordre de lecture ---------- */
-  @media(max-width:899px){
-    .page{padding:.8rem .8rem 1.2rem}
-    .top{gap:.45rem .9rem;padding-bottom:.55rem;margin-bottom:.7rem}
-    .top h1{font-size:1.7rem}
-    .killbar{padding:.5rem .6rem;margin-bottom:.65rem}
-    .kill b{font-size:.92rem;padding:.26rem .6rem}
-    .kh{font-size:.75rem}
-    .grid{gap:.6rem}
-    .stack{display:contents}
-    .a-map{order:1}.a-jobs{order:2}.a-wipe{order:3}.a-adds{order:4}.a-prep{order:5}
-    .card{padding:.6rem .7rem}
-    .mapwrap{gap:.5rem}
-    .mapwrap figure,.mapwrap img{max-height:42vh}
-    .jb{grid-template-columns:3.8rem 1fr;gap:.5rem;padding:.3rem .35rem}
-    .notes{gap:.3rem}
-  }
+.steps{counter-reset:s;list-style:none;margin:22px 0 0;padding:0}
+.steps li{position:relative;padding:0 0 14px 40px;border-left:1px solid var(--line);margin-left:12px}
+.steps li:last-child{border-left-color:transparent;padding-bottom:0}
+.steps li::before{
+  counter-increment:s;content:counter(s);
+  position:absolute;left:-13px;top:-2px;width:26px;height:26px;border-radius:50%;
+  background:var(--panel-2);border:1px solid var(--line);color:var(--kaznar);
+  font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:.85rem;
+  display:grid;place-items:center
+}
+.steps li p{margin:0;font-size:.94rem}
+.steps li b{color:var(--ink)}
 
-  /* ---------- tablette : 2 colonnes ---------- */
-  @media(min-width:620px) and (max-width:899px){
-    .grid{grid-template-columns:1fr 1fr;align-items:start}
-    .a-map{grid-column:1;grid-row:1 / span 3}
-    .a-jobs{grid-column:2}.a-wipe{grid-column:2}.a-adds{grid-column:2}
-    .a-prep{grid-column:1}
-    .mapwrap figure,.mapwrap img{max-height:none}
-  }
+footer{border-top:1px solid var(--line);padding:26px 0 60px;color:var(--ink-dim);font-size:.86rem}
 
-  /* ---------- desktop : tout sur un ecran ---------- */
-  @media(min-width:900px){
-    html{font-size:clamp(11px, min(1.72vh, 1.02vw), 22px)}
-    body{height:100vh;overflow:hidden;display:flex;flex-direction:column}
-    .page{flex:1;min-height:0;display:flex;flex-direction:column;
-      padding:1.2rem 1.4rem 1.3rem;width:100%;}
-    .grid{flex:1;min-height:0;align-items:stretch;
-      grid-template-columns:minmax(13rem,1fr) 1.24fr 1.34fr}
-    .a-map{display:flex;flex-direction:column;min-height:0}
-    .stack{min-height:0}
-    .stack .card{display:flex;flex-direction:column}
-    .a-adds{flex:1}
-  }
-
-  /* ---------- telephone en paysage ---------- */
-  @media(max-height:520px) and (min-width:700px){
-    .grid{grid-template-columns:1fr 1fr 1fr;align-items:start}
-    .stack{display:flex}
-    .mapwrap figure,.mapwrap img{max-height:60vh}
-    .top h1{font-size:1.5rem}
-  }
+@media print{
+  body{background:#fff;color:#111}
+  nav.toc,.route{display:none}
+  section{break-inside:avoid;border-top:1px solid #ccc}
+  .job,.note,.danger{background:#fff;border-color:#ccc}
+  a{color:#111}
+}
 </style>
 </head>
 <body>
-<div class="page">
 
-  <div class="top">
-    <div>
-      <div class="eyebrow">Geas Fete &middot; Reisenjima</div>
-      <h1>Schah</h1>
+<header class="hero">
+  <div class="shell">
+    <p class="kicker">Traduction et remise au propre de la vidéo de Velner</p>
+    <h1>Sortie 9 boss</h1>
+    <p class="lede">Le run complet en une heure : ordre de route, buffs, debuffs et rôle exact de chaque job, boss par boss. Version « dancer setup », celle qui sert à monter les Prime le plus vite possible.</p>
+
+    <div class="setup">
+      <span><b>PLD</b>/SCH</span>
+      <span><b>DNC</b>/DRG</span>
+      <span><b>BRD</b></span>
+      <span><b>RDM</b></span>
+      <span><b>COR</b></span>
+      <span><b>GEO</b></span>
+      <span>tous <b>/DRK</b> pour Absorb-TP</span>
+    </div>
+
+    <div class="route">
+      <a href="#degei"><span class="sect">D</span><span class="who">Degei</span></a>
+      <a href="#aita"><span class="sect">H</span><span class="who">Aita</span></a>
+      <a href="#ghatjot"><span class="sect">A</span><span class="who">Ghatjot</span></a>
+      <a href="#leshonn"><span class="sect">B</span><span class="who">Leshonn</span></a>
+      <a href="#skomora"><span class="sect">C</span><span class="who">Skomora</span></a>
+      <a href="#triboulex"><span class="sect">G</span><span class="who">Triboulex</span></a>
+      <a href="#gartell"><span class="sect">F</span><span class="who">Gartell</span></a>
+      <a href="#dhartok"><span class="sect">E</span><span class="who">Dhartok</span></a>
+      <a class="final" href="#aminon"><span class="sect">◆</span><span class="who">Aminon</span></a>
     </div>
   </div>
+</header>
 
-  <div class="killbar">
-    <span class="kl">Ordre de kill</span>
-    <div class="kill">
-      <b>Bhata<em>0:30</em></b><i>&rsaquo;</i><b>Ashva<em>1:00</em></b><i>&rsaquo;</i><b>Gaja<em>1:30</em></b><i>&rsaquo;</i><b>Ratha<em>2:00</em></b><i>&rsaquo;</i><b class="last">Mantri<em>3:00</em></b>
-    </div>
-    <p class="kh">C'est l'ordre de pop. <b>Le Bhata coupe la file d&egrave;s qu'il sort</b> &mdash; au-del&agrave; de 2 min il devient un 2<sup>e</sup> Mantri.</p>
-  </div>
+<div class="shell grid">
 
-  <div class="grid">
+  <nav class="toc">
+    <ol>
+      <li><a href="#avant">Avant l'entrée</a></li>
+      <li><a href="#ouverture">Acuex &amp; shard A</a></li>
+      <li><a href="#fomors">Fomors &amp; shard D</a></li>
+      <li><a href="#degei">D — Degei</a></li>
+      <li><a href="#dnc-notes">Le DNC en général</a></li>
+      <li><a href="#aita">H — Aita</a></li>
+      <li><a href="#kiting">Le kiting PLD</a></li>
+      <li><a href="#shards-bc">Shards B &amp; C</a></li>
+      <li><a href="#ghatjot">A — Ghatjot</a></li>
+      <li><a href="#leshonn">B — Leshonn</a></li>
+      <li><a href="#etage">Notes étage</a></li>
+      <li><a href="#skomora">C — Skomora</a></li>
+      <li><a href="#triboulex">G — Triboulex</a></li>
+      <li><a href="#sets">Les deux sets critiques</a></li>
+      <li><a href="#gartell">F — Gartell</a></li>
+      <li><a href="#dhartok">E — Dhartok</a></li>
+      <li><a href="#aminon">Aminon</a></li>
+      <li><a href="#apres">Temps restant</a></li>
+      <li><a href="#glossaire">Glossaire</a></li>
+    </ol>
+  </nav>
 
-    <div class="card a-map">
-      <h2>Placement</h2>
-      <div class="mapwrap">
-        <figure><img src="map.jpg" alt="Carte de placement pour Schah"></figure>
-        <div class="notes">
-          <div class="nt" style="--c:var(--blue)"><b>Droite, au ???</b>Le RUN tient Schah sur place. Il ne bouge plus.</div>
-          <div class="nt" style="--c:var(--gold)"><b>Gauche, 20 yalms</b>Le WAR ram&egrave;ne les adds. C'est l&agrave; qu'on tape.</div>
-          <div class="nt" style="--c:var(--red)"><b>&Ccedil;a coupe dans les 2 sens</b>Le groupe hors des AoE de Schah, le RUN hors des -ga des adds.</div>
-        </div>
+  <main>
+
+    <!-- AVANT -->
+    <section id="avant">
+      <div class="sect-head"><h2>Avant l'entrée</h2><span class="tag">extérieur</span></div>
+      <p>Tout ce qui se fait dehors est du temps gagné dedans. La bouffe est le point le plus important : la précision magique du Marine Stewpot conditionne les Absorb-TP sur Aminon une heure plus tard.</p>
+      <div class="jobs">
+        <div class="job all"><h4>Groupe</h4><ul>
+          <li>Marine Stewpot pour tout le monde (Acc + Macc)</li>
+          <li>Protect / Shell</li>
+          <li>Silent Oil et Prism Powder en réserve</li>
+        </ul></div>
+        <div class="job cor"><h4>COR</h4><ul><li>Naturalist's Roll avant d'entrer</li></ul></div>
+        <div class="job rdm"><h4>RDM</h4><ul><li>Haste II préchargé sur tout le monde</li></ul></div>
+        <div class="job all"><h4>SCH extérieur (si dispo)</h4><ul>
+          <li>Tabula Rasa puis Regen V sur le groupe</li>
+          <li>Aquaveil sur tout le monde</li>
+        </ul></div>
       </div>
-    </div>
+    </section>
 
-    <div class="stack">
-      <div class="card a-jobs">
-        <h2>Qui fait quoi</h2>
-        <div class="jobs">
-          <div class="jb"><span class="j">WAR<em>/DRG &middot; leader</em></span>
-            <span>Porte le trinket et <b>pop</b>. Provoke chaque add et les ram&egrave;ne &agrave; gauche. Ne touche jamais Schah.</span></div>
-          <div class="jb"><span class="j">RUN<em>tank Schah</em></span>
-            <span>Provoke Schah juste apr&egrave;s le pop, le tient &agrave; droite. <b>Odyllic &agrave; 55&nbsp;%.</b></span></div>
-          <div class="jb"><span class="j">SCH<em>anti-shield</em></span>
-            <span><b>Casse le shield du Gaja</b> &agrave; la magie : sorts rapides et pas chers, c'est le nombre de casts qui compte. Accession Erase sur les debuffs.</span></div>
-          <div class="jb"><span class="j">RDM<em>heal</em></span>
-            <span>Heal principal. Haste II, Phalanx II sur les tanks, Dia III.</span></div>
-          <div class="jb"><span class="j">BRD<em>songs</em></span>
-            <span>Songs + Savage Blade. <b>Rechante apr&egrave;s chaque Dark Arrivisme.</b></span></div>
-          <div class="jb"><span class="j">COR<em>rolls</em></span>
-            <span>Chaos + Sam rolls, Savage Blade. <b>Quick Draw</b> passe &agrave; travers le shield du Gaja.</span></div>
-          <div class="jb"><span class="j">GEO<em>bubbles</em></span>
-            <span>Fury / Frailty, bubbles <b>c&ocirc;t&eacute; adds</b> &mdash; pas c&ocirc;t&eacute; RUN.</span></div>
-        </div>
+    <!-- OUVERTURE -->
+    <section id="ouverture">
+      <div class="sect-head"><h2>Ouverture : Acuex et shard A</h2><span class="tag">secteur A → D</span></div>
+      <p>Bolter's Roll immédiatement, puis direction sud vers les Acuex sur la route de D. On en rassemble cinq, on s'arrête pour procer le shard A et on pose les buffs préliminaires.</p>
+      <div class="jobs">
+        <div class="job brd"><h4>BRD</h4><ul>
+          <li>Honor March, Victory March, Minuet V, Aria of Passion</li>
+          <li>Pas de Nightingale / Troubadour ici</li>
+          <li>Double march parce que Degei va sortir Eroding Flesh et écraser le Haste</li>
+        </ul></div>
+        <div class="job cor"><h4>COR</h4><ul><li>Samurai Roll uniquement</li></ul></div>
+        <div class="job geo"><h4>GEO</h4><ul><li>Indi-Barrier</li><li>Geo-Malaise</li></ul></div>
+        <div class="job pld"><h4>PLD</h4><ul>
+          <li>Majesty, Light Arts, Addendum: White</li>
+          <li>Objectif : être un healer à part entière</li>
+          <li>S'occupe des deux Acuex supplémentaires pour le blue chest bonus</li>
+        </ul></div>
+        <div class="job dnc"><h4>DNC</h4><ul><li>Ruthless Stroke → Ruthless Stroke pour monter un Darkness</li></ul></div>
+        <div class="job rdm"><h4>RDM + GEO</h4><ul><li>Magic burst Blizzard sur le Darkness pour poser le shard A sur le PLD</li></ul></div>
       </div>
+      <p style="margin-top:20px">Une fois les chants posés, le BRD part devant rassembler les Fomors pour enchaîner sur le shard D.</p>
+    </section>
 
-      <div class="card a-prep">
-        <h2>Avant de pop</h2>
-        <ul class="list">
-          <li>Le <b>WAR est party leader</b> et porte Schah's gambit.</li>
-          <li>Les 7 ont leur <b>tribulens</b>.</li>
-          <li><b>Echo Drops</b> sur le RDM et le SCH.</li>
-          <li><b>Throwing Tomahawks</b> dans le sac du WAR.</li>
+    <!-- FOMORS -->
+    <section id="fomors">
+      <div class="sect-head"><h2>Fomors et shard D</h2><span class="tag">proc arme</span></div>
+      <p>Le proc se fait en montant une skillchain jusqu'au <strong>step 4</strong> : quatre WS qui s'enchaînent, puis un cinquième WS pour achever le Fomor. BRD, DNC et PLD procent, le RDM casse les Fomors en trop, le COR aide le PLD.</p>
+      <div class="jobs">
+        <div class="job dnc"><h4>DNC — dague</h4><ul>
+          <li>Dancing Edge ×4 pour monter la chain jusqu'au step 4</li>
+          <li>Rudra's Storm pour achever</li>
+        </ul></div>
+        <div class="job brd"><h4>BRD</h4><ul>
+          <li>Wasping Gust en boucle jusqu'au step 4</li>
+          <li>Avec la Prime dagger : Ruthless Stroke comme step 4, puis un second Ruthless Stroke pour tuer</li>
+        </ul></div>
+        <div class="job pld"><h4>PLD — épée</h4><ul>
+          <li>Burning Blade, Shining Blade, Burning Blade, Flat Blade — step 4</li>
+          <li>Savage Blade pour finir</li>
+        </ul></div>
+        <div class="job geo"><h4>GEO</h4><ul><li>Bulle Wilt pour la protection</li></ul></div>
+      </div>
+    </section>
+
+    <!-- DEGEI -->
+    <section id="degei">
+      <div class="sect-head"><span class="badge">D</span><h2>Degei</h2><span class="tag">facile, mais à procer</span></div>
+      <p>Rien de compliqué : on rentre dedans et on tape. Le seul piège est le proc après chaque TP move, sinon il accumule une résistance DT progressive.</p>
+      <div class="jobs">
+        <div class="job geo"><h4>GEO</h4><ul>
+          <li>Indi-Fury, Geo-Frailty</li>
+          <li>Garder l'Entrust</li>
+          <li>Responsable des procs élémentaires (voir table)</li>
+        </ul></div>
+        <div class="job cor"><h4>COR</h4><ul>
+          <li>Maintenir Samurai Roll</li>
+          <li>Pas de Chaos : le Bolter's doit être prêt à la seconde où Degei meurt</li>
+        </ul></div>
+        <div class="job rdm"><h4>RDM</h4><ul><li>Dia III et rien d'autre, puis DPS</li></ul></div>
+        <div class="job pld"><h4>PLD</h4><ul><li>Retirer les debuffs, soigner</li></ul></div>
+      </div>
+      <p style="margin-top:22px">Pour procer : sort tier 1 de l'élément opposé au dernier TP move. C'est le GEO qui s'en charge, le RDM reste sur les dégâts.</p>
+      <table>
+        <thead><tr><th>TP move de Degei</th><th>Élément du sort tier 1</th></tr></thead>
+        <tbody>
+          <tr><td>Flaming Kick</td><td><b>Water</b></td></tr>
+          <tr><td>Flash Flood</td><td><b>Thunder</b></td></tr>
+          <tr><td>Icy Grasp</td><td><b>Fire</b></td></tr>
+          <tr><td>Eroding Flesh</td><td><b>Wind</b></td></tr>
+          <tr><td>Fulminous Smash</td><td><b>Earth</b></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- DNC NOTES -->
+    <section id="dnc-notes">
+      <div class="sect-head"><h2>Bonnes pratiques DNC</h2><span class="tag">valable sur tous les boss</span></div>
+      <p>Le DNC veut commencer chaque combat avec <strong>au moins 510 TP</strong>. C'est ce qui permet de poser Haste Samba et deux Box Steps sans avoir touché le boss une seule fois.</p>
+      <ul class="steps">
+        <li><p>Avant le pull, pré-poser <b>Haste Samba</b> et <b>Presto</b> pour éviter le lock des JA et lancer le cooldown de Presto.</p></li>
+        <li><p>Ouvrir sur <b>Presto → Box Step</b> pour monter direct au niveau 5.</p></li>
+        <li><p><b>Presto → Box Step</b> à nouveau pour passer à 10. Les buffs et debuffs du DNC sont posés d'entrée, ensuite il ne fait que taper.</p></li>
+        <li><p>Alterner <b>Ruthless Stroke</b> et <b>Rudra's Storm</b> pour le mur de weapon skills.</p></li>
+        <li><p>Après le combat : <b>Reverse Flourish</b> pour convertir les finishing moves, ou <b>No Foot Rise</b> s'il en manque, afin d'arriver chargé sur le boss suivant.</p></li>
+      </ul>
+      <div class="note">
+        <h4>Saber Dance</h4>
+        <p>Au choix. Si le heal est juste, on s'en passe. Sinon c'est un petit gain de DPS, à prendre si tu es à l'aise. Sur Skomora et Triboulex il vaut mieux ne pas l'utiliser, pour garder Contradance et Healing Waltz disponibles.</p>
+      </div>
+    </section>
+
+    <!-- AITA -->
+    <section id="aita">
+      <div class="sect-head"><span class="badge">H</span><h2>Aita</h2><span class="tag">kite · 2H</span></div>
+      <p>Retour à l'entrée, warp vers D, puis descente en H. C'est un combat à 2H, et le point critique est la Gravity qui doit tenir vite.</p>
+      <div class="jobs">
+        <div class="job brd"><h4>BRD</h4><ul>
+          <li>Soul Voice et Clarion Call</li>
+          <li>Honor March, Minuet IV, Minuet V, Blade Madrigal, Aria of Passion</li>
+        </ul></div>
+        <div class="job cor"><h4>COR</h4><ul>
+          <li>Cutting Cards sur le BRD</li>
+          <li>Chaos Roll et Samurai Roll</li>
+        </ul></div>
+        <div class="job geo"><h4>GEO</h4><ul>
+          <li>Indi-Frailty, Geo-Gravity, Entrust Fury (sur le COR)</li>
+          <li>Ecliptic Attrition, Blaze of Glory</li>
+          <li>Widened Compass : Aita bouge plus vite que les autres boss du sous-sol</li>
+        </ul></div>
+        <div class="job rdm"><h4>RDM</h4><ul>
+          <li>Saboteur avant le pull, puis Gravity I</li>
+          <li>Après son premier TP move : Spontaneity, Gravity II, Gravity II</li>
+          <li>Ensuite Dia III, et Distract III seulement s'il a sorti Icy Grasp</li>
+          <li>WS : Black Halo</li>
+        </ul></div>
+        <div class="job pld"><h4>PLD</h4><ul>
+          <li>Fealty juste après le premier Flash</li>
+          <li>Ça protège des debuffs du premier TP move (la paralysie d'Icy Grasp fait très mal au tank)</li>
+        </ul></div>
+        <div class="job dnc"><h4>Le reste</h4><ul>
+          <li>DNC : Rudra's Storm / Ruthless Stroke</li>
+          <li>BRD et COR : Savage Blade</li>
+          <li>GEO : Judgment</li>
+        </ul></div>
+      </div>
+      <div class="danger">
+        <h4>Au pull</h4>
+        <p>Le groupe tourne vers le fond de la salle pour éviter le premier TP move d'Aita. Une fois qu'il l'a sorti, on enchaîne les Gravity. Et comme sur Degei, ce premier TP move doit être procé avec un sort de tier 1 de l'élément opposé.</p>
+      </div>
+    </section>
+
+    <!-- KITING -->
+    <section id="kiting">
+      <div class="sect-head"><h2>Le kiting PLD</h2><span class="tag">même schéma sur tous les boss</span></div>
+      <ul class="steps">
+        <li><p><b>Pull</b> : Divine Emblem puis Flash à plus de 20 yalms. La première action sur un mob donne un bonus d'enmité, mieux vaut ça que de l'aggro passivement.</p></li>
+        <li><p><b>Sentinel</b>, puis <b>Palisade</b>, puis <b>Rampart</b>.</p></li>
+        <li><p><b>Rampart au bon moment</b> : plus il touche de cibles, plus il génère d'enmité. Sur Aita par exemple, on attend que le groupe rentre après la Gravity et on le déclenche en passant à côté d'eux.</p></li>
+        <li><p>Se placer à <b>20 yalms</b>, poser Reprisal, Flash à chaque cooldown, et tourner en cercles serrés autour du boss pour le garder dans la bulle.</p></li>
+        <li><p>En cas de doute sur la hate : se cure soi-même. Bonus si tu as un set de cure qui te fait descendre bas en HP avant de te soigner.</p></li>
+      </ul>
+      <div class="note">
+        <h4>Matos de kite</h4>
+        <p>Aegis pour le bonus d'enmité, et Omelette Sandwich comme bouffe dans Sortie, pour la même raison.</p>
+      </div>
+    </section>
+
+    <!-- SHARDS BC -->
+    <section id="shards-bc">
+      <div class="sect-head"><h2>Split : shards B et C</h2><span class="tag">3 + 3</span></div>
+      <p>On remonte et le groupe se coupe en deux. <strong>COR, RDM, GEO</strong> vont en B. <strong>BRD, PLD, DNC</strong> vont en C.</p>
+      <div class="jobs">
+        <div class="job dnc"><h4>Secteur C — les Corses</h4><ul>
+          <li>Le DNC va chercher trois Corses et les ramène au device pendant que le PLD buff</li>
+          <li>Proc = magic burst sans tuer : Ruthless Stroke ×2, puis burst Banish II ou Horde Lullaby</li>
+          <li>Le BRD dispel les Ice Spikes et endort les Corses en trop</li>
+          <li>PLD et DNC peuvent en faire une chacun en parallèle, mais attention : ces mobs sleep et charm</li>
+          <li>Holy Circle du PLD, pour la défense en plus</li>
+        </ul></div>
+        <div class="job rdm"><h4>Secteur B — les Fire Elementals</h4><ul>
+          <li>GEO : Indi-Malaise, et bien tagger chaque Fire Elemental</li>
+          <li>RDM Chant du Cygne → COR Leaden Salute, ça suffit à les tuer</li>
+          <li>Cinq à sortir</li>
+        </ul></div>
+      </div>
+      <div class="note">
+        <h4>Regroupement vers A</h4>
+        <ul>
+          <li>Le DNC met Chocobo Jig à son groupe.</li>
+          <li>Si le groupe B est devant ou juste derrière, s'assurer que tout le monde a bien le Bolter's Roll.</li>
+          <li>Si vous croisez l'Abdella en chemin, tuez-la : red chest.</li>
         </ul>
       </div>
-    </div>
+    </section>
 
-    <div class="stack">
-      <div class="card alert a-wipe">
-        <h2>&Ccedil;a fait wipe</h2>
-        <ul class="list">
-          <li><b>Personne ne touche Schah</b> &agrave; part le RUN. Pas de Provoke, pas de WS, rien.</li>
-          <li><b>WAR : jamais Super Jump ni High Jump</b> &mdash; &ccedil;a efface sa haine, les adds partent sur les mages.</li>
-          <li><b>Le seuil des 50&nbsp;% vaut pour Schah ET pour Mantri</b> &rarr; Enthrall, charm AoE. On ne le franchit que pr&ecirc;t &agrave; burst.</li>
-          <li><b>Garder les 2 packs s&eacute;par&eacute;s.</b> Personne ne fait la navette.</li>
-        </ul>
+    <!-- GHATJOT -->
+    <section id="ghatjot">
+      <div class="sect-head"><span class="badge">A</span><h2>Ghatjot</h2><span class="tag">burst pur</span></div>
+      <p>Il n'y a rien à raconter : on charge et on la défonce.</p>
+      <div class="jobs">
+        <div class="job geo"><h4>GEO</h4><ul><li>Indi-Fury, Geo-Frailty</li></ul></div>
+        <div class="job cor"><h4>COR</h4><ul>
+          <li>Samurai Roll uniquement, pas de Chaos : le combat sera fini avant</li>
+          <li>Bolter's immédiatement après la mort</li>
+        </ul></div>
+        <div class="job pld"><h4>PLD</h4><ul>
+          <li>Sentinel et Rampart pour un peu de hate, puis DPS</li>
+          <li>Garder Palisade pour Leshonn, il serait encore en cooldown sinon</li>
+        </ul></div>
+        <div class="job rdm"><h4>RDM</h4><ul><li>Dia III, puis dégâts</li></ul></div>
+      </div>
+      <p style="margin-top:20px">À la mort : Bolter's Roll, Silent Oil, direction B.</p>
+    </section>
+
+    <!-- LESHONN -->
+    <section id="leshonn">
+      <div class="sect-head"><span class="badge">B</span><h2>Leshonn</h2><span class="tag">dépend des hands</span></div>
+      <p>Bon moment pour réappliquer les chants : Honor March, trois chants d'attaque, Aria of Passion. Blade Madrigal peut sauter ici. Ensuite tout dépend de la couleur de ses hands.</p>
+
+      <h3 style="margin:26px 0 0;font-size:1.1rem;color:var(--ink)">Thunder hands</h3>
+      <div class="jobs">
+        <div class="job geo"><h4>GEO</h4><ul><li>Indi-Fury, Geo-Frailty avec Blaze of Glory et Ecliptic Attrition</li></ul></div>
+        <div class="job rdm"><h4>RDM</h4><ul><li>Dia III seulement, plus En-Stone pour les dégâts</li></ul></div>
+        <div class="job pld"><h4>PLD</h4><ul><li>Fealty contre les stuns</li></ul></div>
+        <div class="job all"><h4>Groupe</h4><ul><li>Tout le monde saute dessus, ça doit tomber vite</li></ul></div>
       </div>
 
-      <div class="card a-adds">
-        <h2>Ce que chaque add vous fait</h2>
-        <ul class="list">
-          <li><span class="add-n">Bhata</span> &mdash; Dark Arrivisme : knockback AoE et <u>dispel 3 buffs</u>. Le plus faible, mais il passe 7 fois : le BRD et le COR rebuffent en continu.</li>
-          <li><span class="add-n">Ashva</span> &mdash; Silencega AoE (RDM <i>et</i> SCH coup&eacute;s d'un coup). Banneret Charge : 20', HP &agrave; 1 <u>et reset de haine</u> &mdash; le WAR reprend tous les adds derri&egrave;re.</li>
-          <li><span class="add-n">Gaja</span> &mdash; Slowga. Besieger's Bane : Bio + <u>Zombie</u> (plus aucun heal re&ccedil;u) + Terror. Shield : la magie fait 0 d&eacute;g&acirc;t mais l'&eacute;rode, le physique non.</li>
-          <li><span class="add-n">Ratha</span> &mdash; Bindga + Paralyga. Shadow Wreck : d&eacute;g&acirc;ts AoE et <u>50&nbsp;% Defense Down</u>, et &ccedil;a peut lui donner un buff type Dread Spikes.</li>
-          <li><span class="add-n">Mantri</span> &mdash; <u>Enthrall &agrave; &le;&nbsp;50&nbsp;% : charm AoE.</u> Stun AoE + Sleepga. <b>R&eacute;siste &agrave; la magie</b> (moiti&eacute; des d&eacute;g&acirc;ts d'un Bhata) : &agrave; tuer au physique. Ne respawn jamais &mdash; on peut la laisser en vie, 1 seul add ne donne pas de DT.</li>
+      <h3 style="margin:30px 0 0;font-size:1.1rem;color:var(--ink)">Wind hands</h3>
+      <div class="jobs">
+        <div class="job pld"><h4>PLD</h4><ul><li>Set Sakpata's, on part en kite</li><li>Rester 20 yalms derrière, entretenir la hate</li></ul></div>
+        <div class="job rdm"><h4>RDM</h4><ul>
+          <li>Saboteur → Bind</li>
+          <li>Gravity I, puis Spontaneity et deux Gravity II</li>
+          <li>Si ça ne tient pas, alterner Gravity I / Gravity II jusqu'à ce que ça passe</li>
+          <li>En-Blizzard pour les dégâts</li>
+          <li>Une fois la Gravity posée : Dia III et Distract III</li>
+        </ul></div>
+        <div class="job geo"><h4>GEO</h4><ul>
+          <li>Indi-Frailty, Entrust Fury, Geo-Gravity</li>
+          <li>Si le RDM n'a réussi que Gravity I : Blaze of Glory sur la bulle</li>
+          <li>Si Gravity II est passée : pas de Blaze of Glory</li>
+          <li>Pas d'Ecliptic Attrition dans les deux cas</li>
+        </ul></div>
+      </div>
+      <div class="note">
+        <h4>À la mort</h4>
+        <p>Surtout si c'était les purple hands : retirer tous les Dia, remonter tout le monde en HP, et poser Sneak. La suite, c'est de l'undead.</p>
+      </div>
+    </section>
+
+    <!-- ETAGE -->
+    <section id="etage">
+      <div class="sect-head"><h2>Notes pour l'étage</h2><span class="tag">Skomora → Triboulex</span></div>
+      <div class="jobs">
+        <div class="job pld"><h4>PLD</h4><ul><li>Passage en Naegling + Blurred Shield pour le DPS : pas besoin de tanker en haut</li></ul></div>
+        <div class="job cor"><h4>COR</h4><ul><li>Samurai Roll seul, toujours Crooked Cards dessus</li><li>Light Shot sur chaque boss, ne pas l'oublier</li></ul></div>
+        <div class="job brd"><h4>BRD</h4><ul><li>Pas besoin de Blade Madrigal : Honor March, trois chants d'attaque, Aria</li></ul></div>
+        <div class="job all"><h4>Tout le monde</h4><ul>
+          <li>RDM garde Haste II en permanence</li>
+          <li>Last Resort sur chaque boss puisque tout le monde est /DRK</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <!-- SKOMORA -->
+    <section id="skomora">
+      <div class="sect-head"><span class="badge">C</span><h2>Skomora</h2><span class="tag">undead</span></div>
+      <p>Simple : on l'entoure et on tape. La vraie difficulté est le nettoyage après.</p>
+      <div class="jobs">
+        <div class="job pld"><h4>PLD</h4><ul><li>Holy Circle sur le groupe</li><li>Sepulcher et Banish II sur Skomora</li></ul></div>
+        <div class="job rdm"><h4>RDM / GEO</h4><ul><li>Dia III, Distract III</li><li>Indi-Fury, Geo-Frailty</li></ul></div>
+        <div class="job dnc"><h4>DNC</h4><ul>
+          <li>Pas de Saber Dance ici</li>
+          <li>Attendre le premier Erase, puis Contradance + Healing Waltz pour dégager les debuffs</li>
+        </ul></div>
+      </div>
+      <div class="danger">
+        <h4>Son Curse ne s'enlève pas</h4>
+        <p>Pour retrouver de la vitesse il faut un bon Bolter's Roll <em>plus</em> le Chocobo Jig. Un lucky à 3 suffit, sinon vise un chiffre élevé — et jamais 9, c'est l'unlucky. Le DNC attend que le Bolter's soit posé avant de mettre le Jig, qui dure moins longtemps : l'objectif est d'arriver le plus près possible du boss suivant avec les deux actifs.</p>
+      </div>
+    </section>
+
+    <!-- TRIBOULEX -->
+    <section id="triboulex">
+      <div class="sect-head"><span class="badge">G</span><h2>Triboulex</h2><span class="tag">kite</span></div>
+      <p>On redescend au sous-sol par le device C. À partir d'ici le COR doit tenir Chaos et Samurai en permanence.</p>
+      <div class="note">
+        <h4>Préserver un 11 (COR)</h4>
+        <p>Si tu as déjà un 11, tu ne roules jamais par-dessus. Casse ton Bolter's en faisant une action sur un boss avant de relancer Chaos ou Samurai. En approchant du warp vers Triboulex, c'est le bon moment pour lancer le Chaos dehors et le doubler une fois dans la salle : ça libère le Samurai derrière.</p>
+      </div>
+      <div class="jobs">
+        <div class="job pld"><h4>PLD</h4><ul>
+          <li>Set Sakpata's</li>
+          <li>Holy Circle sur tout le groupe, Banish II et Sepulcher sur le boss</li>
+          <li>Fealty obligatoire contre le Bind, sinon impossible de kiter</li>
+          <li>Cures au besoin, on ne retire le Bind qu'à la fin</li>
+          <li>Vers 5 % : Accession + Erase en rentrant</li>
+        </ul></div>
+        <div class="job brd"><h4>BRD</h4><ul>
+          <li>Honor March, Blade Madrigal, deux Minuets, Aria of Passion</li>
+          <li>Marcato sur Blade Madrigal : c'est ce qui prépare Gartell</li>
+        </ul></div>
+        <div class="job rdm"><h4>RDM</h4><ul><li>Saboteur, Gravity II, Dia III, Distract III, Impact, puis dégâts</li></ul></div>
+        <div class="job geo"><h4>GEO</h4><ul>
+          <li>Indi-Fury, Geo-Frailty</li>
+          <li>Garder Blaze of Glory et Ecliptic Attrition pour Gartell</li>
+        </ul></div>
+        <div class="job dnc"><h4>DNC</h4><ul>
+          <li>Pas de Saber Dance, Contradance + Healing Waltz en fin de combat</li>
+          <li>Chocobo Jig une fois le Bolter's posé (même Curse que Skomora)</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <!-- SETS -->
+    <section id="sets">
+      <div class="sect-head"><h2>Les deux sets qui décident du run</h2><span class="tag">non négociables</span></div>
+      <div class="jobs">
+        <div class="job rdm"><h4>RDM — Gravity / Gravity II</h4><ul>
+          <li>Set de potency maximale, rien d'autre</li>
+          <li>Plus la Gravity est forte, plus le kite est possible</li>
+        </ul></div>
+        <div class="job pld"><h4>PLD — enmité</h4><ul>
+          <li>Enmité maximale, aucun compromis</li>
+          <li>Les mobs doivent être aussi lents que possible et tu ne peux pas perdre la hate</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <!-- GARTELL -->
+    <section id="gartell">
+      <div class="sect-head"><span class="badge">F</span><h2>Gartell</h2><span class="tag">kite · Invincible</span></div>
+      <p>En traversant F, quelqu'un doit partir sur la droite vérifier le Bitzer. En principe celui qui est devant y va. Si ce n'est pas le DNC, il doit revenir lui remettre un Chocobo Jig, sinon il arrivera bien après tout le monde et ralentira le run.</p>
+      <div class="jobs">
+        <div class="job rdm"><h4>RDM</h4><ul>
+          <li>Chainspell + Saboteur, spam Gravity II jusqu'à ce que ça tienne</li>
+          <li>Thunder hands : Bind d'abord au centre de la salle, puis la Gravity</li>
+          <li>Ensuite Dia III</li>
+          <li>Green hands : Distract III. Thunder hands : inutile, ça ne passera pas</li>
+          <li>En-Stone sur thunder hands, En-Blizzard sur wind hands</li>
+        </ul></div>
+        <div class="job pld"><h4>PLD</h4><ul>
+          <li>Toutes les JA d'enmité pendant que le RDM cast, <b>Invincible compris</b></li>
+          <li>Sur wind hands, perdre la hate veut dire se faire aspirer et voler ses buffs</li>
+        </ul></div>
+        <div class="job geo"><h4>GEO</h4><ul>
+          <li>Indi-Frailty, Entrust Fury</li>
+          <li>Blaze of Glory et Ecliptic Attrition sur une bulle Geo-Gravity</li>
+        </ul></div>
+        <div class="job all"><h4>Groupe</h4><ul>
+          <li>On pull au centre de la salle</li>
+          <li>Personne n'engage tant que le PLD n'est pas à 20 yalms, sinon Gartell place un TP move</li>
+        </ul></div>
+      </div>
+      <div class="note">
+        <h4>Pourquoi le Marcato sur Blade Madrigal</h4>
+        <p>Si Gartell sort en thunder hands, tu n'auras pas de Distract. La précision du Blade Madrigal marcaté compense.</p>
+      </div>
+    </section>
+
+    <!-- DHARTOK -->
+    <section id="dhartok">
+      <div class="sect-head"><span class="badge">E</span><h2>Dhartok</h2><span class="tag">kite · gestion des rolls</span></div>
+      <p>Le combat est simple, c'est le COR qui travaille. Sur la route, il essaie de charger un 11 sur un roll qui n'est ni Chaos ni Samurai — Naturalist's Roll par exemple. Random Deal, Snake Eye et Fold sont disponibles pour y arriver, mais on ne prend jamais le risque d'un double bust.</p>
+      <ul class="steps">
+        <li><p>Tu arrives sur Dhartok avec un <b>11 Naturalist</b> et un Bolter's.</p></li>
+        <li><p>Casse le Bolter's en faisant une action sur Dhartok, puis pose le <b>Samurai Roll</b> sur le groupe, aussi haut que tu le sens.</p></li>
+        <li><p>Pas de 11 sur le Samurai ? Éloigne-toi du groupe et <b>bust-le</b>. Tu gardes ton 11 Naturalist, le groupe garde son Samurai.</p></li>
+        <li><p>Dès que Phantom Roll revient, reviens poser le <b>Chaos Roll</b>. Même règle : pas de 11, tu t'éloignes et tu bustes.</p></li>
+        <li><p>Ainsi, au Bolter's de fin de combat, tu repars avec un 11 intact et tu es prêt pour Aminon.</p></li>
+      </ul>
+      <div class="jobs">
+        <div class="job rdm"><h4>RDM</h4><ul><li>Saboteur, Gravity II, Dia III, Distract III</li></ul></div>
+        <div class="job geo"><h4>GEO</h4><ul><li>Indi-Fury, Geo-Frailty</li><li>Pas besoin de bulle Gravity, il est déjà assez lent</li></ul></div>
+        <div class="job brd"><h4>BRD</h4><ul>
+          <li>Refaire les chants sans Nightingale ni Troubadour</li>
+          <li>Honor March, Blade Madrigal, Minuet V, Aria of Passion</li>
+        </ul></div>
+      </div>
+      <p style="margin-top:18px">Sur le trajet Dhartok → Aminon, le COR a une dernière occasion de charger un 11. Toujours sans se retrouver coincé avec un bust.</p>
+    </section>
+
+    <!-- AMINON -->
+    <section id="aminon">
+      <div class="sect-head"><span class="badge end">◆</span><h2>Aminon</h2><span class="tag">déni de TP</span></div>
+      <div class="danger">
+        <h4>La règle unique</h4>
+        <p>Aminon doit mourir sans avoir sorti un seul TP move. On <strong>n'engage jamais</strong>. Les dégâts viennent uniquement des weapon skills, et son TP est mangé par les Absorb-TP du RDM, du GEO, du COR et du BRD.</p>
+      </div>
+      <div class="note">
+        <h4>Cadence des Absorb-TP</h4>
+        <ul>
+          <li>Absorb-TP à chaque cooldown, sauf si plusieurs personnes castent en même temps — dans ce cas, on décale.</li>
+          <li>Cadence sûre : un Absorb-TP tous les trois weapon skills.</li>
+          <li>Quatre WS sans absorb : zone dangereuse.</li>
+          <li>Cinq WS : on arrête tout et on absorb immédiatement.</li>
+          <li>Si quelqu'un récupère plus de 300 TP sur un seul absorb, la cadence est trop lente, on corrige.</li>
         </ul>
       </div>
-    </div>
+      <div class="note">
+        <h4>Le set Absorb-TP</h4>
+        <p>Précision magique maximale, avec assez de Fast Cast pour ramener le recast à 12 secondes — compte environ 25 % de Fast Cast au midcast. Une Ambuscade cape Fast Cast / précision magique fait beaucoup de travail, et on n'oublie ni l'AF +4 ni les pièces Null (Cloud of Darkness HTBF).</p>
+      </div>
 
-  </div>
+      <div class="jobs">
+        <div class="job pld"><h4>PLD</h4><ul>
+          <li>Tenir la hate et ne jamais prendre de dégâts : Stoneskin en permanence</li>
+          <li>Tout est magique chez Aminon : Aegis et Miso Ramen +1 aident énormément</li>
+          <li>Pull en Divine Emblem + Flash, on subit le dispel complet, on part dans le coin</li>
+          <li>Immédiatement : Majesty, Stoneskin, Rampart, Phalanx</li>
+          <li>Stoneskin stable → Crusade, Enlight, Accession + Aurorastorm, Aquaveil, Regen III (utile pour ceux en Naegling)</li>
+          <li>Hate : Sentinel, Palisade, Fealty, puis à chaque cooldown</li>
+          <li>WS uniquement quand tu vois qu'un Absorb-TP vient de passer</li>
+          <li>Knights of Round avec Excalibur ; sinon Savage Blade en Naegling si le COR ne l'utilise pas déjà ; sinon Chant du Cygne en Reikikō ou Burtgang, puis Atonement pour l'enmité</li>
+          <li>Le Regain+30 du Reikikō est ce qui te donne du TP : tu ne swings jamais sur Aminon</li>
+          <li>Réappliquer Phalanx dès qu'il tombe, et refaire Stoneskin quand il reste ~3 minutes</li>
+          <li>Caster entre les coups d'Aminon pour ne pas se faire interrompre au midcast</li>
+        </ul></div>
+
+        <div class="job rdm"><h4>RDM</h4><ul>
+          <li>Haste II sur tout le groupe, Refresh III sur tout le monde sauf le DNC</li>
+          <li>Au pull : Saboteur + Frazzle III, Stymie + Distract III, puis Dia III</li>
+          <li>Absorb-TP immédiatement derrière</li>
+          <li>Rebuff le PLD s'il s'est fait dispel</li>
+          <li>Ensuite Absorb-TP à chaque cooldown, Black Halo quand c'est le moment</li>
+        </ul></div>
+
+        <div class="job brd"><h4>BRD</h4><ul>
+          <li>Au pull : Nightingale, Troubadour, Soul Voice, Clarion Call</li>
+          <li><b>Dark Threnody II sur Aminon tout de suite</b> : sans ça, les Absorb-TP ne passent pas</li>
+          <li>Dès que le PLD est à portée : Honor March, Minuet IV et V, Blade Madrigal, Aria of Passion</li>
+          <li>Chants posés → Absorb-TP immédiat</li>
+          <li>WS au choix : Mordant Rime, ou Savage Blade en Naegling</li>
+          <li>Réappliquer Dark Threnody II juste avant la fin de Soul Voice pour maximiser sa durée</li>
+          <li>S'il tombe : Nightingale + Troubadour + Marcato pour le remettre</li>
+        </ul></div>
+
+        <div class="job geo"><h4>GEO</h4><ul>
+          <li>Indi-Fury, Geo-Frailty, Entrust Precision</li>
+          <li><b>Bulle derrière Aminon</b> pour éviter la majorité de ses AoE : activer l'affichage des zones d'effet dans Config → Miscellaneous 3, caster Geo-Frailty depuis le menu, maintenir Ctrl et déplacer la flèche derrière lui — en le gardant dans la zone</li>
+          <li>Ouverture : Blaze of Glory puis Bolster (le Blaze en ouverture évite de devoir refaire la bulle quand Bolster tombe)</li>
+          <li>Bolster terminé → Ecliptic Attrition</li>
+          <li>La bulle ne doit jamais mourir avec Blaze et Ecliptic en cooldown : Dematerialize et Life Cycle pour la tenir</li>
+          <li>Si Random Deal rend l'Entrust : Entrust Strength possible, mais garder celui du Wild Card pour remettre Precision</li>
+          <li><b>Maintenir Impact sur Aminon</b>, c'est critique. S'il tombe, on le remet immédiatement</li>
+          <li>TP en Thundara III / Blizzara III en set Occult Acumen entre les Absorb-TP, WS Judgment</li>
+        </ul></div>
+
+        <div class="job cor"><h4>COR</h4><ul>
+          <li>Tactician's Roll et Miser's Roll, Crooked Cards sur le Tactician's</li>
+          <li>Un lucky est acceptable même avec un 11 chargé, sinon on vise le 11</li>
+          <li>Sans 11 préchargé : Snake Eye et Random Deal pour le meilleur chiffre possible, sans s'arrêter sur un unlucky</li>
+          <li>Coordonner le Random Deal avec le DNC ; si Crooked Cards revient, le mettre sur le Miser's</li>
+          <li>Light Shot sur Aminon, Fire Shot pour générer du TP</li>
+          <li>Absorb-TP à chaque cooldown, Savage Blade, Random Deal et Wild Card à la demande du DNC</li>
+        </ul></div>
+
+        <div class="job dnc"><h4>DNC — le poste le plus technique</h4><ul>
+          <li>Engagé sur Aminon tout le combat, mais placé à environ un yalm de la portée de mêlée : assez près pour WS et Box Step, trop loin pour taper. Utilise Box Step pour tester la distance</li>
+          <li>+4 Knockback dans le gear, sinon tu passes le combat à te replacer</li>
+          <li>Box Step 10 en permanence : Presto au début pour y arriver, puis rafraîchir</li>
+          <li>Les trois autres steps servent à générer des finishing moves, mais <b>il faut les laisser expirer avant de les remettre</b> : chaque stack rallonge la durée, et une fois maxé tu ne récupères plus qu'un seul finishing move, même avec Presto</li>
+          <li>Exemple : après un Feather Step, tu passes sur Quickstep et Stutter Step, et tu ne retouches pas au Feather Step tant qu'il n'est pas tombé</li>
+          <li>Climactic Flourish à chaque cooldown, alternance Rudra's Storm / Ruthless Stroke</li>
+          <li>Cadence : un WS sur le TP du Tactician's, le suivant sur Reverse Flourish, puis un Presto step pour refaire des finishing moves et rafraîchir le Box Step</li>
+        </ul></div>
+      </div>
+
+      <h3 style="margin:34px 0 0;font-size:1.1rem;color:var(--ink)">La séquence finale du DNC</h3>
+      <ul class="steps">
+        <li><p>Arriver au Random Deal avec seulement <b>Climactic Flourish</b> et <b>Reverse Flourish</b> en cooldown. Pour ça, on garde Saber Dance, No Foot Rise et les jumps pour après.</p></li>
+        <li><p>Random Deal → on brûle toutes les JA, et on réutilise Climactic Flourish s'il a été reset.</p></li>
+        <li><p>Attendre d'avoir le TP, <b>Climactic Flourish</b>, premier WS.</p></li>
+        <li><p><b>Grand Pas</b>, puis trois WS via Reverse Flourish.</p></li>
+        <li><p><b>Trance</b> dans la foulée. Ensuite on récupère du TP par tous les moyens pour un WS de plus.</p></li>
+        <li><p>Appeler le <b>Wild Card</b>. Une fois qu'il part, tu es revenu au début du combat : tu reprends la boucle jusqu'à la mort d'Aminon.</p></li>
+      </ul>
+
+      <div class="danger">
+        <h4>Trois détails qui tuent le run</h4>
+        <ul>
+          <li>Le DNC utilise Super Jump vers 50 % et High Jump pour lâcher la hate. Aminon ne doit jamais se tourner vers lui : chaque coup qu'il place lui rend du TP.</li>
+          <li>Pas de Slow ni de Paralyze si des membres portent les pièces Regal, qui convertissent les dégâts reçus en TP.</li>
+          <li>Le PLD utilise une macro de WS sans swing. Ne presse aucune autre macro tant qu'elle n'est pas terminée, sinon l'attack off ne part pas et l'épée reste sortie.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- APRES -->
+    <section id="apres">
+      <div class="sect-head"><h2>Le temps restant</h2><span class="tag">bonus</span></div>
+      <p>Aminon mort, le reste de l'heure est à vous. L'habitude du groupe : monter tuer le mini NM de l'étage pour faire pop l'<strong>Aurum Coffer</strong>, puis redescendre en H récupérer le blue chest bonus. Mais faites-en ce que vous voulez.</p>
+      <div class="note">
+        <h4>Aurum Coffer</h4>
+        <p>Il pop à l'étage une fois tous les mini-NM errants des secteurs A à D tués. Il donne 1 000 gallimaufry et peut contenir un old case ou un saphir, et comme les blue caskets et red coffers il peut lâcher des JSE earrings et des items d'upgrade Empyrean +2/+3 ou Prime.</p>
+      </div>
+    </section>
+
+    <!-- GLOSSAIRE -->
+    <section id="glossaire">
+      <div class="sect-head"><h2>Glossaire</h2><span class="tag">transcription auto → vrai nom</span></div>
+      <p>Les sous-titres automatiques massacrent la moitié des noms propres. Voici la correspondance, utile si tu relis la transcription brute.</p>
+      <table>
+        <thead><tr><th>Dans les sous-titres</th><th>En vrai</th></tr></thead>
+        <tbody>
+          <tr><td>Dai / "the guy"</td><td><b>Degei</b> (boss D)</td></tr>
+          <tr><td>Aayata / ATA</td><td><b>Aita</b> (boss H)</td></tr>
+          <tr><td>gout</td><td><b>Ghatjot</b> (boss A)</td></tr>
+          <tr><td>Lean / LeBron</td><td><b>Leshonn</b> (boss B)</td></tr>
+          <tr><td>Skamorei / Skomora</td><td><b>Skomora</b> (boss C)</td></tr>
+          <tr><td>tribullet / Tribula</td><td><b>Triboulex</b> (boss G)</td></tr>
+          <tr><td>Dartk</td><td><b>Dhartok</b> (boss E)</td></tr>
+          <tr><td>Ammon</td><td><b>Aminon</b> (boss final)</td></tr>
+          <tr><td>acux / Acuax</td><td>Acuex</td></tr>
+          <tr><td>Abdulla</td><td>Abdella</td></tr>
+          <tr><td>fommores</td><td>Fomors</td></tr>
+          <tr><td>courses</td><td>Corses</td></tr>
+          <tr><td>bitser</td><td>Diaphanous Bitzer</td></tr>
+          <tr><td>valinuette / valor menu</td><td>Minuet</td></tr>
+          <tr><td>blade magical</td><td>Blade Madrigal</td></tr>
+          <tr><td>ar of passion</td><td>Aria of Passion</td></tr>
+          <tr><td>night andgale trouidor / NiTro</td><td>Nightingale + Troubadour</td></tr>
+          <tr><td>marcado</td><td>Marcato</td></tr>
+          <tr><td>mortant rhyme</td><td>Mordant Rime</td></tr>
+          <tr><td>dark thinity / thrity</td><td>Dark Threnody II</td></tr>
+          <tr><td>failins</td><td>Phalanx</td></tr>
+          <tr><td>fieldy / feelalty / falty</td><td>Fealty</td></tr>
+          <tr><td>a session</td><td>Accession</td></tr>
+          <tr><td>aurora storm</td><td>Aurorastorm</td></tr>
+          <tr><td>add a dendum white</td><td>Addendum: White</td></tr>
+          <tr><td>sepulker</td><td>Sepulcher</td></tr>
+          <tr><td>satza / servata</td><td>Sakpata's (set)</td></tr>
+          <tr><td>nagling</td><td>Naegling</td></tr>
+          <tr><td>CDC</td><td>Chant du Cygne</td></tr>
+          <tr><td>letin</td><td>Leaden Salute</td></tr>
+          <tr><td>rouges / ruthless</td><td>Ruthless Stroke</td></tr>
+          <tr><td>rugger storm</td><td>Rudra's Storm</td></tr>
+          <tr><td>hey samba</td><td>Haste Samba</td></tr>
+          <tr><td>grandpa</td><td>Grand Pas</td></tr>
+          <tr><td>DF3</td><td>Dia III</td></tr>
+          <tr><td>sty</td><td>Stymie</td></tr>
+          <tr><td>bolters roll</td><td>Bolter's Roll</td></tr>
+          <tr><td>snake eyes</td><td>Snake Eye</td></tr>
+          <tr><td>amboo cape</td><td>Ambuscade cape</td></tr>
+          <tr><td>null equipment</td><td>les pièces Null (Null Shawl, Null Loop, etc.)</td></tr>
+          <tr><td>Raichiko</td><td>Reikikō (épée)</td></tr>
+          <tr><td>Om chest</td><td>Aurum Coffer</td></tr>
+          <tr><td>oult acument</td><td>Occult Acumen</td></tr>
+          <tr><td>widen compass</td><td>Widened Compass</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
 </div>
+
+<footer>
+  <div class="shell">Traduction et mise en forme de la transcription de la vidéo « 9 bosses, one Sortie » de Velner. Les noms d'abilities et de sorts sont laissés en anglais, comme en jeu.</div>
+</footer>
+
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+  var map = {};
+  links.forEach(function(a){
+    var el = document.querySelector(a.getAttribute('href'));
+    if(el) map[el.id] = a;
+  });
+  if(!('IntersectionObserver' in window)) return;
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(l){ l.classList.remove('on'); });
+        if(map[e.target.id]) map[e.target.id].classList.add('on');
+      }
+    });
+  }, {rootMargin: '-10% 0px -80% 0px'});
+  Object.keys(map).forEach(function(id){ obs.observe(document.getElementById(id)); });
+})();
+</script>
+
 </body>
 </html>
